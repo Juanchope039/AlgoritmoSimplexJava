@@ -13,21 +13,21 @@ import java.util.LinkedList;
 public class MetodoSimplex {
     
     protected final String realizar;
-    protected int[] B, C;
+    protected int[] b, C;
     protected int[][] A;
     protected LinkedList<IteracionSimplex> It;
     
 
-    MetodoSimplex(String realizar, int[] B, int[][] A, int[] C) {
+    MetodoSimplex(String realizar, int[][] A, int[] b, int[] C) {
         this.realizar = realizar;
         this.A = A;
-        this.B = B;
+        this.b = b;
         this.C = C;
     }
 
     public boolean calcularResultado() {
         do{
-            IteracionSimplex iteracion = new IteracionSimplex(realizar, B, A, C);
+            IteracionSimplex iteracion = new IteracionSimplex(realizar, A, b, C);
             It.add(iteracion);
         }while(It.getLast().esSolucionOptima());
         return false;

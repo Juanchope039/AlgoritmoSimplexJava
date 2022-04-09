@@ -36,15 +36,15 @@ public class main {
         /**
          * Por ultimo ingresamos el vector derecho
          */
-                B[] = { 4,
+                b[] = { 4,
                         12,
                         18};
         System.out.println(realizar);
         System.out.println(Arrays.toString(C));
         for (int[] A1 : A)
             System.out.println(Arrays.toString(A1));
-        System.out.println(Arrays.toString(B));
-        MetodoSimplex simplex = new MetodoSimplex(realizar,B,A,C);
+        System.out.println(Arrays.toString(b));
+        MetodoSimplex simplex = new MetodoSimplex(realizar,A,b,C);
         simplex.calcularResultado();
 //        menu(simplex); 
     }
