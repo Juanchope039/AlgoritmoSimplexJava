@@ -1,3 +1,15 @@
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.GridLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -14,8 +26,8 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
      */
     public UsaMetodoSimplex() {
         initComponents();
-    }
-
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,7 +67,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(82, 182, 154));
         jPanel2.setPreferredSize(new java.awt.Dimension(400, 100));
-        jPanel2.setLayout(new java.awt.GridLayout(2, 1));
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setPreferredSize(new java.awt.Dimension(537, 200));
@@ -91,15 +103,27 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         jTextField2.setMargin(new java.awt.Insets(0, 0, 0, 0));
         jPanel4.add(jTextField2);
 
-        jPanel2.add(jPanel4);
+        jPanel2.add(jPanel4, java.awt.BorderLayout.NORTH);
 
         btnIniciar.setBackground(new java.awt.Color(24, 78, 119));
         btnIniciar.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
         btnIniciar.setForeground(new java.awt.Color(255, 255, 255));
         btnIniciar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnIniciar.setText("Iniciar");
+        btnIniciar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIniciar.setOpaque(true);
-        jPanel2.add(btnIniciar);
+        btnIniciar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                iniciarProceso(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                efectoHover(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                efectoHover(evt);
+            }
+        });
+        jPanel2.add(btnIniciar, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -118,6 +142,144 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+//    Método para iniciar el proceso.
+//    Se toman los valores de los inputBox para tomar la cantidad de variables
+//    de decisión y la cantidad de restricciones
+//    ------------------------------------------------------------------------
+//    Se crea un JPanel y se ingresa en el JFrame
+//    ------------------------------------------------------------------------
+//    Abreviaturas.
+//    
+//    Vd --> Indica variable de decisión.
+//    Rs --> Indica restricciones.
+//    Bg --> Background.
+//    Ly --> Layout.
+    private void iniciarProceso(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iniciarProceso
+        int variablesDecision = Integer.parseInt(jTextField1.getText());
+        int cantidadRestricciones = Integer.parseInt(jTextField2.getText());
+
+//      A continuación, se crea un nuevo panel con nuevas etiquetas y campos dentro de él.
+//      La personalización de los componentes se hace con las características
+//      de los componentes anteriores y nuevas características.    
+        Color bgTitulos = new Color(118, 200, 147);
+        Color bgEtiquetas = new Color(153, 217, 140);
+        
+//      Se crea el panel
+        JPanel panelCoeficientes = new JPanel();
+
+//      Creamos un layout para el panel de coeficientes
+        GridLayout gLyCoeficientes = new GridLayout(4, 1);
+        
+        panelCoeficientes.setLayout(gLyCoeficientes);
+        
+//      Etiquetas de título
+//      1. Coeficientes de Variables de decisión
+//      2. Coeficientes de restricciones
+        JLabel etiquetaCoeficientesVd = new JLabel();
+        JLabel etiquetaCoeficientesRs = new JLabel();
+        
+        etiquetaCoeficientesVd = jLabel2;
+        etiquetaCoeficientesRs = jLabel2;
+        
+//      Asignación de textos
+        etiquetaCoeficientesVd.setText("Coeficientes de función objetivo");
+        etiquetaCoeficientesRs.setText("Coeficientes de restricciones");
+
+//      Asignación de background color
+        etiquetaCoeficientesVd.setBackground(bgTitulos);
+        etiquetaCoeficientesRs.setBackground(bgTitulos);
+        
+//      Creamos un panel para almacenar los etiquetas y campos de la función objetivo
+        JPanel panelCoeficientesVd = new JPanel();
+
+//      Creamos un grid layout para el panel de coeficientes de la función objetivo
+        GridLayout gLyCoeficientesVd = new GridLayout(1, variablesDecision*2);
+        
+        panelCoeficientesVd.setLayout(gLyCoeficientesVd);
+
+//      Por cada variable objetivo, se añade una etiqueta y un campo
+        for (int i = 0; i < variablesDecision; i++) {
+            JLabel etiquetaVd = new JLabel();
+            JTextField campoVd = new JTextField();
+            
+            etiquetaVd = jLabel1;
+            campoVd = jTextField1;
+            
+            etiquetaVd.setText("X" + (i+1));
+            campoVd.setText(Integer.toString((i+1)));
+            
+            panelCoeficientesVd.add(etiquetaVd);
+            panelCoeficientesVd.add(campoVd);
+        }
+        
+//      Creamos un panel para almacenar las etiquetas y campos de las restricciones
+        JPanel panelCoeficientesRs = new JPanel();
+        
+//      Creamos un grid layout para ubicar en cada una de las restricciones en el panel
+        GridLayout gLyCoeficientesRs = new GridLayout(cantidadRestricciones, 1);
+        panelCoeficientesRs.setLayout(gLyCoeficientesRs);
+        
+//      Creamos un comboBox para asignar las operaciones de menor igual, mayor igual o igual
+        JComboBox comboRs = new JComboBox();
+        comboRs.setFont(jLabel2.getFont());
+        comboRs.setBackground(Color.WHITE);
+        comboRs.setForeground(Color.BLACK);
+        comboRs.addItem("≥");
+        comboRs.addItem("≤");
+        comboRs.addItem("=");
+        
+        for (int i = 0; i < cantidadRestricciones; i++) {
+            JPanel panelCoeficienteRsAux = new JPanel();
+            GridLayout gLyCoeficientesRsAux = new GridLayout(1, (variablesDecision*2 + 2));
+            panelCoeficienteRsAux.setLayout(gLyCoeficientesRsAux);
+            
+            for (int j = 0; j < variablesDecision; j++) {
+                JLabel etiquetaRs = new JLabel();
+                JTextField campoRs = new JTextField();
+                JTextField campoRsB = new JTextField();
+                
+                etiquetaRs = jLabel1;
+                campoRs = jTextField1;
+                campoRsB = jTextField1;
+            
+                etiquetaRs.setText("X" + (i+1));
+                campoRs.setText(Integer.toString((i+1)));
+                campoRsB.setText(Integer.toString((i+1)));
+                
+                panelCoeficienteRsAux.add(etiquetaRs);
+                panelCoeficienteRsAux.add(campoRs);
+                panelCoeficienteRsAux.add(campoRsB);
+                panelCoeficienteRsAux.add(comboRs);
+            }
+           
+            panelCoeficientesRs.add(panelCoeficienteRsAux);
+        }
+        
+//      Agregamos todo lo creado y personalizado anteriormente
+        panelCoeficientes.add(etiquetaCoeficientesVd);
+        panelCoeficientes.add(panelCoeficientesVd);
+        panelCoeficientes.add(etiquetaCoeficientesRs);
+        panelCoeficientes.add(panelCoeficientesRs);
+        
+        jPanel2.add(panelCoeficientes, BorderLayout.SOUTH);
+    }//GEN-LAST:event_iniciarProceso
+    
+//    Método para realizar el efecto 'Hover'.
+//    El efecto Hover es cuando el mouse pasa por encima 
+//    de un componente y este cambia de color inidicando que dicho
+//    componente está activo.
+    private void efectoHover(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_efectoHover
+        Color bg = btnIniciar.getBackground();
+        Color azulClaro = new Color(30, 96, 145);
+        Color azulOscuro = new Color(24, 78, 119);
+        
+        if (bg == azulOscuro) {
+        btnIniciar.setBackground(azulClaro);
+        } else {
+            btnIniciar.setBackground(azulOscuro);
+        }
+    }//GEN-LAST:event_efectoHover
 
     /**
      * @param args the command line arguments
