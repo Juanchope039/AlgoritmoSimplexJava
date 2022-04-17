@@ -2,11 +2,13 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
@@ -39,6 +41,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -65,8 +68,10 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
+        jScrollPane1.setBorder(null);
+
         jPanel2.setBackground(new java.awt.Color(82, 182, 154));
-        jPanel2.setPreferredSize(new java.awt.Dimension(400, 100));
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 400));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -125,7 +130,9 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         });
         jPanel2.add(btnIniciar, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
+        jScrollPane1.setViewportView(jPanel2);
+
+        getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel3.setBackground(new java.awt.Color(82, 182, 154));
         jPanel3.setPreferredSize(new java.awt.Dimension(537, 50));
@@ -179,32 +186,51 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         JLabel etiquetaCoeficientesVd = new JLabel();
         JLabel etiquetaCoeficientesRs = new JLabel();
         
-        etiquetaCoeficientesVd = jLabel2;
-        etiquetaCoeficientesRs = jLabel2;
+        etiquetaCoeficientesVd.setOpaque(true);
+        etiquetaCoeficientesRs.setOpaque(true);
+        
+        etiquetaCoeficientesVd.setFont(jLabel2.getFont());
+        etiquetaCoeficientesRs.setFont(jLabel2.getFont());
+        
+        etiquetaCoeficientesVd.setBackground(bgTitulos);
+        etiquetaCoeficientesRs.setBackground(bgTitulos);
+        
+        etiquetaCoeficientesVd.setHorizontalAlignment(JLabel.CENTER);
+        etiquetaCoeficientesVd.setVerticalAlignment(JLabel.CENTER);
+        etiquetaCoeficientesRs.setHorizontalAlignment(JLabel.CENTER);
+        etiquetaCoeficientesRs.setVerticalAlignment(JLabel.CENTER);
+        
+        etiquetaCoeficientesVd.setForeground(jLabel2.getForeground());
+        etiquetaCoeficientesRs.setForeground(jLabel2.getForeground());
         
 //      Asignación de textos
         etiquetaCoeficientesVd.setText("Coeficientes de función objetivo");
         etiquetaCoeficientesRs.setText("Coeficientes de restricciones");
-
-//      Asignación de background color
-        etiquetaCoeficientesVd.setBackground(bgTitulos);
-        etiquetaCoeficientesRs.setBackground(bgTitulos);
         
 //      Creamos un panel para almacenar los etiquetas y campos de la función objetivo
         JPanel panelCoeficientesVd = new JPanel();
-
+    
 //      Creamos un grid layout para el panel de coeficientes de la función objetivo
         GridLayout gLyCoeficientesVd = new GridLayout(1, variablesDecision*2);
-        
         panelCoeficientesVd.setLayout(gLyCoeficientesVd);
+        panelCoeficientesVd.setBackground(bgEtiquetas);
 
 //      Por cada variable objetivo, se añade una etiqueta y un campo
         for (int i = 0; i < variablesDecision; i++) {
             JLabel etiquetaVd = new JLabel();
             JTextField campoVd = new JTextField();
             
-            etiquetaVd = jLabel1;
-            campoVd = jTextField1;
+            etiquetaVd.setBackground(jLabel2.getBackground());
+            etiquetaVd.setForeground(jLabel2.getForeground());
+            etiquetaVd.setFont(jLabel2.getFont());
+            etiquetaVd.setHorizontalAlignment(JLabel.CENTER);
+            etiquetaVd.setVerticalAlignment(JLabel.CENTER);
+            
+            campoVd.setBorder(jTextField1.getBorder());
+            campoVd.setBackground(jTextField1.getBackground());
+            campoVd.setForeground(jTextField1.getForeground());
+            campoVd.setFont(jTextField1.getFont());
+            campoVd.setHorizontalAlignment(JTextField.CENTER);
             
             etiquetaVd.setText("X" + (i+1));
             campoVd.setText(Integer.toString((i+1)));
@@ -220,39 +246,57 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         GridLayout gLyCoeficientesRs = new GridLayout(cantidadRestricciones, 1);
         panelCoeficientesRs.setLayout(gLyCoeficientesRs);
         
-//      Creamos un comboBox para asignar las operaciones de menor igual, mayor igual o igual
-        JComboBox comboRs = new JComboBox();
-        comboRs.setFont(jLabel2.getFont());
-        comboRs.setBackground(Color.WHITE);
-        comboRs.setForeground(Color.BLACK);
-        comboRs.addItem("≥");
-        comboRs.addItem("≤");
-        comboRs.addItem("=");
-        
         for (int i = 0; i < cantidadRestricciones; i++) {
             JPanel panelCoeficienteRsAux = new JPanel();
             GridLayout gLyCoeficientesRsAux = new GridLayout(1, (variablesDecision*2 + 2));
             panelCoeficienteRsAux.setLayout(gLyCoeficientesRsAux);
             
+            //      Creamos un comboBox para asignar las operaciones de menor igual, mayor igual o igual
+            JComboBox comboRs = new JComboBox();
+            comboRs.setFont(jLabel2.getFont());
+            comboRs.setBackground(Color.WHITE);
+            comboRs.setForeground(Color.BLACK);
+            comboRs.addItem("≥");
+            comboRs.addItem("≤");
+            comboRs.addItem("=");
+            
             for (int j = 0; j < variablesDecision; j++) {
                 JLabel etiquetaRs = new JLabel();
                 JTextField campoRs = new JTextField();
-                JTextField campoRsB = new JTextField();
                 
-                etiquetaRs = jLabel1;
-                campoRs = jTextField1;
-                campoRsB = jTextField1;
-            
-                etiquetaRs.setText("X" + (i+1));
-                campoRs.setText(Integer.toString((i+1)));
-                campoRsB.setText(Integer.toString((i+1)));
+                etiquetaRs.setBackground(jLabel2.getBackground());
+                etiquetaRs.setForeground(jLabel2.getForeground());
+                etiquetaRs.setFont(jLabel2.getFont());
+                etiquetaRs.setHorizontalAlignment(JLabel.CENTER);
+                etiquetaRs.setVerticalAlignment(JLabel.CENTER);
+                
+                campoRs.setBorder(jTextField1.getBorder());
+                campoRs.setBackground(jTextField1.getBackground());
+                campoRs.setForeground(jTextField1.getForeground());
+                campoRs.setFont(jTextField1.getFont());
+                campoRs.setHorizontalAlignment(JTextField.CENTER);
+                
+                etiquetaRs.setText("X" + (j+1));
+                campoRs.setText(Integer.toString((j+1)));
                 
                 panelCoeficienteRsAux.add(etiquetaRs);
                 panelCoeficienteRsAux.add(campoRs);
-                panelCoeficienteRsAux.add(campoRsB);
-                panelCoeficienteRsAux.add(comboRs);
             }
-           
+            
+            JTextField campoRsB = new JTextField();
+            
+            campoRsB.setBorder(jTextField1.getBorder());
+            campoRsB.setBackground(jTextField1.getBackground());
+            campoRsB.setForeground(jTextField1.getForeground());
+            campoRsB.setFont(jTextField1.getFont());
+            campoRsB.setHorizontalAlignment(JTextField.CENTER);
+            campoRsB.setText(Integer.toString((i+1)));
+            
+            panelCoeficienteRsAux.add(comboRs);
+            panelCoeficienteRsAux.add(campoRsB);
+            
+            panelCoeficienteRsAux.setBackground(bgEtiquetas);
+            
             panelCoeficientesRs.add(panelCoeficienteRsAux);
         }
         
@@ -262,7 +306,28 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         panelCoeficientes.add(etiquetaCoeficientesRs);
         panelCoeficientes.add(panelCoeficientesRs);
         
-        jPanel2.add(panelCoeficientes, BorderLayout.SOUTH);
+//      Se crea un jScroll
+        JScrollPane scrollPanel = new JScrollPane(panelCoeficientes);
+        
+        scrollPanel.setPreferredSize(new Dimension(400, 400));
+        
+        scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        
+        jPanel2.add(scrollPanel, BorderLayout.SOUTH);
+        
+        this.validate();
+        
+        for (int i = 0; i < jPanel2.getComponentCount(); i++) {
+            System.out.println("Componente #" + i + " " + jPanel2.getComponent(i));
+            
+            if (i == 2) {
+                for (int j = 0; j < panelCoeficientes.getComponentCount(); j++) {
+                    System.out.println("Componente interior #" + j + " " + panelCoeficientes.getComponent(j));
+                }
+            }
+        }
     }//GEN-LAST:event_iniciarProceso
     
 //    Método para realizar el efecto 'Hover'.
@@ -326,6 +391,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
