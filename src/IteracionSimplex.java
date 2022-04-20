@@ -1,3 +1,6 @@
+
+import java.util.Arrays;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -62,8 +65,20 @@ public class IteracionSimplex {
         return Xb;
     }    
     
-    private int[][] MatrizInversa(int[][] m){
-        return null;
+    private int[][] MatrizInversa(int[][] A){
+        int[][] I = new int[A.length][A[0].length];
+        calcularMatrizIdentidad(I);
+        if (!A.equals(I)){
+            for (int i = 0; i < A.length; i++) {
+                System.out.println("Leegar de aquí:\n" +
+                        Arrays.toString(A[0]) +
+                        "Acá: \n" +
+                        Arrays.toString(I[0])
+                );
+            }
+            
+        }        
+        return I;
     }
     
     /***
@@ -140,6 +155,15 @@ public class IteracionSimplex {
 
     private boolean esOptimo(int[][] CbPorBInverPorAMenosC) {
         return true;
+    }
+
+    protected void calcularMatrizIdentidad(int[][] I) {
+        int i= 0;
+        for (int j = 0; j < I.length; j++) {
+            for (int k = 0; k < I[j].length; k++) 
+                I[j][k]= (i==k ? 1: 0);
+            i++;
+        }
     }
     
 }

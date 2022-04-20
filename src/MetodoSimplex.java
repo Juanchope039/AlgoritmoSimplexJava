@@ -18,7 +18,7 @@ public class MetodoSimplex {
     protected LinkedList<IteracionSimplex> It;
     
 
-    MetodoSimplex(String realizar, int[][] A, int[] b, int[] C) {
+    public MetodoSimplex(String realizar, int[][] A, int[] b, int[] C) {
         this.realizar = realizar;
         this.A = A;
         this.b = b;
