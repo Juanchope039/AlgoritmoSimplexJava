@@ -5,8 +5,12 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -176,7 +180,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         JPanel panelCoeficientes = new JPanel();
 
 //      Creamos un layout para el panel de coeficientes
-        GridLayout gLyCoeficientes = new GridLayout(4, 1);
+        GridLayout gLyCoeficientes = new GridLayout(5, 1);
         
         panelCoeficientes.setLayout(gLyCoeficientes);
         
@@ -300,11 +304,31 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
             panelCoeficientesRs.add(panelCoeficienteRsAux);
         }
         
+//      Creamos el botón que nos permitirá realizar todo el proceso
+        JLabel btnRealizar = new JLabel("¡Realizar simplex!");
+        
+        btnRealizar.setOpaque(true);
+        btnRealizar.setBackground(new Color(118, 200, 147));
+        btnRealizar.setForeground(Color.WHITE);
+        btnRealizar.setFont(jLabel2.getFont());
+        btnRealizar.setHorizontalAlignment(JLabel.CENTER);
+        btnRealizar.setBorder(jLabel2.getBorder());
+        btnRealizar.setVerticalAlignment(JLabel.CENTER);
+        btnRealizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnRealizar.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+//              Aquí se ejecuta el método que programará JuanDa (Donde está toda la programación)
+                realizarMetodo();
+            }
+        });
+        
 //      Agregamos todo lo creado y personalizado anteriormente
         panelCoeficientes.add(etiquetaCoeficientesVd);
         panelCoeficientes.add(panelCoeficientesVd);
         panelCoeficientes.add(etiquetaCoeficientesRs);
         panelCoeficientes.add(panelCoeficientesRs);
+        panelCoeficientes.add(btnRealizar);
         
 //      Se crea un jScroll
         JScrollPane scrollPanel = new JScrollPane(panelCoeficientes);
@@ -319,16 +343,13 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         
         this.validate();
         
-        for (int i = 0; i < jPanel2.getComponentCount(); i++) {
-            System.out.println("Componente #" + i + " " + jPanel2.getComponent(i));
-            
-            if (i == 2) {
-                for (int j = 0; j < panelCoeficientes.getComponentCount(); j++) {
-                    System.out.println("Componente interior #" + j + " " + panelCoeficientes.getComponent(j));
-                }
-            }
-        }
     }//GEN-LAST:event_iniciarProceso
+    
+//  Este es el método que realizara todas las operaciones
+    public void realizarMetodo(){
+        JOptionPane.showMessageDialog(null, "Está funcionando");
+        System.out.println("Esto es una prueba");
+    }
     
 //    Método para realizar el efecto 'Hover'.
 //    El efecto Hover es cuando el mouse pasa por encima 
@@ -340,7 +361,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         Color azulOscuro = new Color(24, 78, 119);
         
         if (bg == azulOscuro) {
-        btnIniciar.setBackground(azulClaro);
+            btnIniciar.setBackground(azulClaro);
         } else {
             btnIniciar.setBackground(azulOscuro);
         }
