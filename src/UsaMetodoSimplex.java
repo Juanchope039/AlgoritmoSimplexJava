@@ -8,7 +8,9 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,12 +28,14 @@ import javax.swing.border.Border;
  * @author JUANDI
  */
 public class UsaMetodoSimplex extends javax.swing.JFrame {
-
+    
+    private boolean yaInicio = false;
     /**
      * Creates new form UsaMetodoSimplex
      */
     public UsaMetodoSimplex() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }    
     
     /**
@@ -73,9 +77,10 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jScrollPane1.setBorder(null);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(400, 200));
 
         jPanel2.setBackground(new java.awt.Color(82, 182, 154));
-        jPanel2.setPreferredSize(new java.awt.Dimension(400, 400));
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 200));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -120,7 +125,10 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         btnIniciar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnIniciar.setText("Iniciar");
         btnIniciar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIniciar.setFocusCycleRoot(true);
+        btnIniciar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnIniciar.setOpaque(true);
+        btnIniciar.setPreferredSize(new java.awt.Dimension(66, 400));
         btnIniciar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 iniciarProceso(evt);
@@ -167,23 +175,30 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
 //    Bg --> Background.
 //    Ly --> Layout.
     private void iniciarProceso(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iniciarProceso
-        int variablesDecision = Integer.parseInt(jTextField1.getText());
+        int variablesDecision = Integer.parseInt(jTextField1.getText());        
         int cantidadRestricciones = Integer.parseInt(jTextField2.getText());
 
 //      A continuación, se crea un nuevo panel con nuevas etiquetas y campos dentro de él.
 //      La personalización de los componentes se hace con las características
 //      de los componentes anteriores y nuevas características.    
-        Color bgTitulos = new Color(118, 200, 147);
-        Color bgEtiquetas = new Color(153, 217, 140);
+        Color bgGeneral = new Color(82,182,154);
         
 //      Se crea el panel
         JPanel panelCoeficientes = new JPanel();
-
+        panelCoeficientes.setBorder(BorderFactory.createEmptyBorder());
+        
 //      Creamos un layout para el panel de coeficientes
-        GridLayout gLyCoeficientes = new GridLayout(5, 1);
+        BorderLayout bLyCoeficientes = new BorderLayout();
+        panelCoeficientes.setLayout(bLyCoeficientes);
         
-        panelCoeficientes.setLayout(gLyCoeficientes);
-        
+//      Creamos un panel para guardar etiquetaVd, panelCoeficientesVd y etiquetaRs
+        JPanel panelNorte = new JPanel();
+        GridLayout gLyNorte = new GridLayout(3, 1);
+        panelNorte.setLayout(gLyNorte);
+        panelNorte.setBorder(BorderFactory.createEmptyBorder());
+        panelNorte.setBackground(bgGeneral);
+        panelNorte.setPreferredSize(new Dimension(400, 400));
+                
 //      Etiquetas de título
 //      1. Coeficientes de Variables de decisión
 //      2. Coeficientes de restricciones
@@ -196,8 +211,8 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         etiquetaCoeficientesVd.setFont(jLabel2.getFont());
         etiquetaCoeficientesRs.setFont(jLabel2.getFont());
         
-        etiquetaCoeficientesVd.setBackground(bgTitulos);
-        etiquetaCoeficientesRs.setBackground(bgTitulos);
+        etiquetaCoeficientesVd.setBackground(bgGeneral);
+        etiquetaCoeficientesRs.setBackground(bgGeneral);
         
         etiquetaCoeficientesVd.setHorizontalAlignment(JLabel.CENTER);
         etiquetaCoeficientesVd.setVerticalAlignment(JLabel.CENTER);
@@ -217,7 +232,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
 //      Creamos un grid layout para el panel de coeficientes de la función objetivo
         GridLayout gLyCoeficientesVd = new GridLayout(1, variablesDecision*2);
         panelCoeficientesVd.setLayout(gLyCoeficientesVd);
-        panelCoeficientesVd.setBackground(bgEtiquetas);
+        panelCoeficientesVd.setBackground(bgGeneral);
 
 //      Por cada variable objetivo, se añade una etiqueta y un campo
         for (int i = 0; i < variablesDecision; i++) {
@@ -243,15 +258,23 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
             panelCoeficientesVd.add(campoVd);
         }
         
+//      Añadimos todo lo creado anteriormente al panelNorte
+        panelNorte.add(etiquetaCoeficientesVd);
+        panelNorte.add(panelCoeficientesVd);
+        panelNorte.add(etiquetaCoeficientesRs);
+
 //      Creamos un panel para almacenar las etiquetas y campos de las restricciones
         JPanel panelCoeficientesRs = new JPanel();
         
 //      Creamos un grid layout para ubicar en cada una de las restricciones en el panel
         GridLayout gLyCoeficientesRs = new GridLayout(cantidadRestricciones, 1);
+        panelCoeficientesRs.setBorder(BorderFactory.createEmptyBorder());
         panelCoeficientesRs.setLayout(gLyCoeficientesRs);
+        panelCoeficientesRs.setBackground(bgGeneral);
         
         for (int i = 0; i < cantidadRestricciones; i++) {
             JPanel panelCoeficienteRsAux = new JPanel();
+            panelCoeficienteRsAux.setBorder(BorderFactory.createEmptyBorder());
             GridLayout gLyCoeficientesRsAux = new GridLayout(1, (variablesDecision*2 + 2));
             panelCoeficienteRsAux.setLayout(gLyCoeficientesRsAux);
             
@@ -289,7 +312,7 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
             
             JTextField campoRsB = new JTextField();
             
-            campoRsB.setBorder(jTextField1.getBorder());
+            campoRsB.setBorder(BorderFactory.createEmptyBorder());
             campoRsB.setBackground(jTextField1.getBackground());
             campoRsB.setForeground(jTextField1.getForeground());
             campoRsB.setFont(jTextField1.getFont());
@@ -298,23 +321,22 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
             
             panelCoeficienteRsAux.add(comboRs);
             panelCoeficienteRsAux.add(campoRsB);
-            
-            panelCoeficienteRsAux.setBackground(bgEtiquetas);
-            
+            panelCoeficienteRsAux.setBackground(bgGeneral);
             panelCoeficientesRs.add(panelCoeficienteRsAux);
-        }
-        
+        }        
+
 //      Creamos el botón que nos permitirá realizar todo el proceso
         JLabel btnRealizar = new JLabel("¡Realizar simplex!");
         
         btnRealizar.setOpaque(true);
-        btnRealizar.setBackground(new Color(118, 200, 147));
+        btnRealizar.setBackground(new Color(24,78,119));
         btnRealizar.setForeground(Color.WHITE);
-        btnRealizar.setFont(jLabel2.getFont());
+        btnRealizar.setFont(btnIniciar.getFont());
         btnRealizar.setHorizontalAlignment(JLabel.CENTER);
-        btnRealizar.setBorder(jLabel2.getBorder());
+        btnRealizar.setBorder(BorderFactory.createEmptyBorder());
         btnRealizar.setVerticalAlignment(JLabel.CENTER);
         btnRealizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnRealizar.setPreferredSize(new Dimension(400, 200));
         
         btnRealizar.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -324,25 +346,44 @@ public class UsaMetodoSimplex extends javax.swing.JFrame {
         });
         
 //      Agregamos todo lo creado y personalizado anteriormente
-        panelCoeficientes.add(etiquetaCoeficientesVd);
-        panelCoeficientes.add(panelCoeficientesVd);
-        panelCoeficientes.add(etiquetaCoeficientesRs);
-        panelCoeficientes.add(panelCoeficientesRs);
-        panelCoeficientes.add(btnRealizar);
+        panelCoeficientes.add(panelNorte, BorderLayout.NORTH);
+        panelCoeficientes.add(panelCoeficientesRs, BorderLayout.CENTER);
+        panelCoeficientes.add(btnRealizar, BorderLayout.SOUTH);
+        
+        
+//        if (cantidadRestricciones >= 1 && cantidadRestricciones < 3) {
+//            jPanel2.setPreferredSize(new Dimension(400, 1200));
+//        } else {
+//            panelCoeficientes.setPreferredSize(new Dimension(400, (cantidadRestricciones*400)));
+//            jPanel2.setPreferredSize(new Dimension(400, (cantidadRestricciones*1200)));
+//        }
         
 //      Se crea un jScroll
         JScrollPane scrollPanel = new JScrollPane(panelCoeficientes);
+        scrollPanel.setBorder(BorderFactory.createEmptyBorder());
+        scrollPanel.setBackground(bgGeneral);
         
-        scrollPanel.setPreferredSize(new Dimension(400, 400));
+        
+        scrollPanel.setPreferredSize(new Dimension(400, 800));
+        
         
         scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
+        jPanel2.setPreferredSize(new Dimension(400, 1200));
         
-        jPanel2.add(scrollPanel, BorderLayout.SOUTH);
+//      Verificamos si anteriormente ha iniciado
+//      Y eliminamos el componente anterior
+        if (yaInicio) {
+            jPanel2.remove(2);
+            jPanel2.add(scrollPanel, BorderLayout.SOUTH);
+        } else {
+            jPanel2.add(scrollPanel, BorderLayout.SOUTH);
+            yaInicio = true;
+        }
         
-        this.validate();
-        
+        this.revalidate();
+        this.repaint();
     }//GEN-LAST:event_iniciarProceso
     
 //  Este es el método que realizara todas las operaciones
