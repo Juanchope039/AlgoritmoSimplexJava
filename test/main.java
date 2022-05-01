@@ -19,7 +19,7 @@ public class main {
          * o maximizar
          */
         String realizar = "Min";
-        int
+        double
         /**
          * Luego introducimos la función objetivo [c]
          */
@@ -41,7 +41,7 @@ public class main {
                         18};
         System.out.println(realizar);
         System.out.println(Arrays.toString(C));
-        for (int[] A1 : A)
+        for (double[] A1 : A)
             System.out.println(Arrays.toString(A1));
         System.out.println(Arrays.toString(b));
         MetodoSimplex simplex = new MetodoSimplex(realizar,A,b,C);

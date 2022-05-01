@@ -13,12 +13,12 @@ import java.util.LinkedList;
 public class MetodoSimplex {
     
     protected final String realizar;
-    protected int[] b, C;
-    protected int[][] A;
+    protected double[] b, C;
+    protected double[][] A;
     protected LinkedList<IteracionSimplex> It;
     
 
-    MetodoSimplex(String realizar, int[][] A, int[] b, int[] C) {
+    MetodoSimplex(String realizar, double[][] A, double[] b, double[] C) {
         this.realizar = realizar;
         this.A = A;
         this.b = b;
