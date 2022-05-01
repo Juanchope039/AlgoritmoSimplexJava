@@ -18,33 +18,33 @@ public class main {
          * Primero describimos que vamos a realizar minimizar,
          * o maximizar
          */
-        String realizar = "Min";
+        String realizar = MetodoSimplex.MINIMIZAR;
         double
         /**
          * Luego introducimos la función objetivo [c]
          */
-                C[] = {-3,-5},
+                C[] = {1, 3, 2, 1, 2},
         /**
          * Luego ingresamos la matriz [A]
          */
                 A[][]= 
                         {
-                            {1,0},
-                            {0,2},
-                            {3,2}
+                            {-1,  2, 0,  1, 1},
+                            { 2, -1, 1, -2, 4},
+                            { 3,  2, 3,  0, 2}
                         },
         /**
          * Por ultimo ingresamos el vector derecho
          */
-                b[] = { 4,
-                        12,
-                        18};
+                b[] = { 7,
+                        15,
+                        13};
         System.out.println(realizar);
         System.out.println(Arrays.toString(C));
         for (double[] A1 : A)
             System.out.println(Arrays.toString(A1));
         System.out.println(Arrays.toString(b));
-        MetodoSimplex simplex = new MetodoSimplex(realizar,A,b,C);
+        MetodoSimplex simplex = new MetodoSimplex(realizar, C, b, A);
         simplex.calcularResultado();
 //        menu(simplex); 
     }

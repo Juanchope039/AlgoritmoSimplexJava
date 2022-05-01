@@ -9,34 +9,18 @@ import java.util.Arrays;
  *
  * @author Admin
  */
-public class IteracionSimplex {
-    
-    private final String realizar;
-    private final double [] b, C; 
-    private final double [][] A;
-    
-    private double[] Cb;
-    private double [][] B;
-    private String[] Xb;
+public class IteracionSimplex extends MetodoSimplex{
     
     private boolean 
             esFactible, 
             esOptima,
             escalculado;
-    
-    public final static String 
-            MAXIMIZAR = "Max",
-            MINIMIZAR = "Min";
 
-    public IteracionSimplex(String realizar, double[][] A, double[] b, double[] C) {
-        this.realizar = realizar;
-        this.A = A;
-        this.b = b;
-        this.C = C;
-    }
+    public IteracionSimplex(String realizar, String[] c, String[] cb, String[] xb, double[] C, double[] Cb, double[] b, double[][] A, double[][] B) {
+        super(realizar, c, cb, xb, C, Cb, b, A, B);
+    }    
     
     public double[] getCb(){
-
         return Cb;
     }
 
@@ -62,121 +46,12 @@ public class IteracionSimplex {
 
     public String[] getXb() {
         return Xb;
-    }    
-    
-    private double[][] MatrixIdentidad(double[][] m){        
-        for (int i = 0; i < m.length; i++) 
-            for (int j = 0; j < m[i].length; j++) {
-                int res = 0;
-                if(j==i)
-                    res=1;
-                m[i][j]=res;
-            }
-        
-        return m;
-    }
-    
-    private double[][] MatrizInversa(double[][] m){
-        //int[][] res = m.clone();
-        
-        double detA = calcularDeterminante(m);
-        
-        if (detA == 0)//No tiene solución
-            return null;
-                
-        double[][]  traA = calcularTranspuesta(m);
-        double[][]  mAdj = calcularMatrizAdjunta(traA);
-        
-        //res = dividirMatriz(mAdj, detA);
-        
-        return dividirMatriz(mAdj, detA);//*/return null;
-    }
-    
-    /**
-     * 
-     * @param m1 La matriz mas pequeña
-     * @param m2 La matriz mas grande
-     * @return la multiplicación de las matrizces en el caso que sea
-     */    
-    private double[][] MultiplicarMatriz(double[][] m1, double[][] m2){
-        int n1,n2;
-        boolean esCuadrada = false;
-        
-        if (m1.length == m2[0].length ){// Matriz cuadrada
-            n1 = m1.length;
-            n2 = m1.length;
-            esCuadrada = true;
-        }else if (m1.length == m2.length && m1.length == m1[0].length){//matriz m*k x k*n
-            n1 = m2.length;
-            n2 = m2[0].length;
-        }else
-            return null;       
-        
-        double[][] res = new double[n1][n2];
-        
-        for (int i = 0; i < res.length; i++) 
-            for (int j = 0; j < res[i].length; j++) {
-                double val = 0;
-                
-                if (esCuadrada){
-                    for (int k = 0; k < m2.length; k++) 
-                        val+= m1[i][k] * m2[k][j];
-                }else{
-                    for (int k = 0; k < m1.length; k++) 
-                       val += m1[i][k] * m2[k][j];
-                }                
-                
-                res[i][j] = val;
-            }
-        
-        return res;
-    }
-    
-    /**
-     * 
-     * @param m1 vector de matriz
-     * @param m2 matriz con igual numero de filas que el vector
-     * @return la multiplicación de las matrizces en el caso que sea
-     */
-    private double[] MultiplicarMatriz(double[] m1, double[][] m2){
-        double[] res = new double[m1.length];
-
-        if (m1.length == m2.length)
-            for (int i = 0; i < m2.length; i++){
-                double val = 0;
-                for (int j = 0; j < m2[0].length; j++)
-                    val+= m1[i] * m2[i][j];
-                res[i] = val;
-            }
-        else if (m1.length == m2[0].length)
-            for (int i = 0; i < m2[0].length; i++){
-                double val = 0;
-                for (int j = 0; j < m2.length; j++)
-                    val+= m1[i] * m2[j][i];
-                res[i] = val;
-            }
-        else
-            return null;
-
-        return res;
-    }
-    
-    private double[] RestarVectores(double[] m1, double[] m2){
-        double[] res = new double[m1.length];
-        
-        if (m1.length != m2.length)
-            return null;
-        
-        for (int i = 0; i < m1.length; i++) 
-            res[i]= m1[i] + m2[i];
-        
-        return res;
-    }
+    }   
     
     public void setXb(String[] Xb) {
         this.Xb = Xb;
-    }
-
+    } 
+    
     public boolean esFactible() {
         if (!escalculado)
             calcularIteración();
@@ -230,198 +105,121 @@ public class IteracionSimplex {
     }
     
     public static void main(String[] args) {
-        IteracionSimplex it = new IteracionSimplex(MAXIMIZAR, null, null, null);
+        String realizar = MetodoSimplex.MAXIMIZAR;
+        double
+        /**
+         * Luego introducimos la función objetivo [c]
+         */
+                C[] = {1, 3, 2, 1, 2},
+        /**
+         * Luego ingresamos la matriz [A]
+         */
+                A[][]= 
+                        {
+                            {-1,  2, 0,  1, 1},
+                            { 2, -1, 1, -2, 4},
+                            { 3,  2, 3,  0, 2}
+                        },
+        /**
+         * Por ultimo ingresamos el vector derecho
+         */
+                b[] = { 7,
+                        15,
+                        13};
         
-        double[] mmult = it.MultiplicarMatriz(new double[]
-            {
-                7,
-                15,
-                13
-            }, new double[][]
-            {
-                {1, 0, 0},
-                {0, 1, 0},
-                {0, 0, 1}
-            });
+        MetodoSimplex it = new MetodoSimplex(realizar,C,b,A);
+        it.It.add(new IteracionSimplex(it.realizar, it.c, it.cb, it.Xb, it.C, it.Cb, it.b, it.A, it.B));
         
-        System.out.println("Vecto b: \n" + Arrays.toString(mmult)+"\n");
-        
-        double[][] mmult2 = it.MultiplicarMatriz(new double[][]
-            {
-                {1, 0, 0},
-                {0, 1, 0},
-                {0, 0, 1}
-            },new double[][]
-            {
-                {-1, 2, 0,  1, 1},
-                {2, -1, 1, -2, 4},
-                {3,  2, 3,  0, 2}
-
-            });
-        
-        System.out.println("Matriz A:");
-        if (mmult2 != null)
-            for (double[] m : mmult2) 
+        System.out.println("Matriz A: ");
+        if (it.It.get(0).getA() != null)
+            for (double[] m : it.It.get(0).getA()) 
                 System.out.println(Arrays.toString(m));
-        System.out.println("\n");
         
-        double detA = it.calcularDeterminante(new double[][]
-        {
-            {2, -2, 2},
-            {2,  1, 0},
-            {3, -2, 2}  
-        });
-        
-        double[][] transA = it.calcularTranspuesta(new double[][]
-        {
-            {2, -2, 2},
-            {2,  1, 0},
-            {3, -2, 2}  
-        });        
-        
-        System.out.println("Determinante de A: " + detA);
-        System.out.println("Transpuesta de A: ");
-        
-        if (transA != null)
-            for (double[] v : transA) 
+        System.out.println("Matriz B: ");
+        if (it.It.get(0).getB() != null)
+            for (double[] v : it.It.get(0).getB()) 
                 System.out.println(Arrays.toString(v));
         
-        double[][] MadjTransA = it.calcularMatrizAdjunta(transA);
+        System.out.println("Matriz b: \n" + Arrays.toString(it.It.get(0).getb()));
         
-        System.out.println("Matriz adjunta de A: ");
+        System.out.println("Matriz C: \n" + Arrays.toString(it.It.get(0).getC()));
         
-        if (MadjTransA != null)
-            for (double[] v : MadjTransA) 
+        System.out.println("*****************************");
+        
+        double detB = it.calcularDeterminante(it.It.get(0).getB());
+        System.out.println("Determinante de B: " + detB);
+        
+        double[][] transB = it.calcularTranspuesta(it.It.get(0).getB());      
+        System.out.println("Transpuesta de B: ");
+        if (transB != null)
+            for (double[] v : transB) 
+                System.out.println(Arrays.toString(v));
+        
+        double[][] MdjTransB = it.calcularMatrizAdjunta(transB);        
+        System.out.println("Matriz adjunta de B: ");        
+        if (MdjTransB != null)
+            for (double[] v : MdjTransB) 
                 System.out.println(Arrays.toString(v));//*/
         
-        double[][] Minversa = it.dividirMatriz(MadjTransA, detA);
-        
-        System.out.println("Matriz inversa de A:");
-        
-        if(Minversa != null)
-            for (double[] v : Minversa)
+        System.out.println("*****************************");
+        double[][] Binversa = it.dividirMatriz(MdjTransB, detB);        
+        System.out.println("Matriz inversa de B:");        
+        if(Binversa != null)
+            for (double[] v : Binversa)
+                System.out.println(Arrays.toString(v));   
+        System.out.println("*****************************");
+        double[] CbXBinver = it.MultiplicarMatriz(it.It.get(0).getCb(), Binversa);
+        System.out.println("Cb * B-1:" + Arrays.toString(CbXBinver)); 
+        IteracionSimplex iteracion0 = it.It.get(0);
+        System.out.println("*****************************");
+        double CbXBinverXb = it.multiplicarVectores(CbXBinver, iteracion0.getb());
+        System.out.println("Cb * B-1 * b :" + CbXBinverXb); 
+        System.out.println("*****************************");
+        double[] BinversaXb = it.MultiplicarMatriz(iteracion0.getb(), Binversa);
+        System.out.println("B-1 * b :" + Arrays.toString(BinversaXb)); 
+        System.out.println("*****************************");
+        double[][] BinversaXA = it.MultiplicarMatriz(Binversa, iteracion0.getA());
+        System.out.println("B-1 * A :"); 
+        if (BinversaXA != null)
+            for (double[] v : BinversaXA) 
                 System.out.println(Arrays.toString(v));
+        System.out.println("*****************************");
+        double[] CbXBinverXA = it.MultiplicarMatriz(CbXBinver, iteracion0.getA());
+        System.out.println("Cb * B-1 * A :" + Arrays.toString(CbXBinverXA)); 
+        System.out.println("*****************************");
+        double[] CbXBinverXAMenosc = it.RestarVectores(CbXBinverXA, iteracion0.getC());
+        System.out.println("Cb * B-1 * A - c:" + Arrays.toString(CbXBinverXAMenosc)); 
+        System.out.println("*****************************");
+        System.out.println("Texto c: " + Arrays.toString(iteracion0.getCText()));
+        System.out.println("Texto CB: " + Arrays.toString(iteracion0.getCbText()));
+        System.out.println("Texto Xb: " + Arrays.toString(iteracion0.getXbText()));
+        System.out.println("Es factible?: " + iteracion0.esFactible());
+        System.out.println("Es Optima?: " + iteracion0.esOptima());
+        System.out.println("*****************************");
+        System.out.println("Aqui deberia calcular correctamente cuando es factible\n"
+                + "cuando es optima\n"
+                + "cuando deberia seguir y cuales variables deberian tomarse en cuenta");
         
+        
+    }    //c, cb, Xb;
+    
+    public double[][] getB(){
+        return this.B;
     }
     
-    private double calcularDeterminante(double[][] m){
-        double res = 0;
-        int compensacion = 0;
-        
-        if (m.length ==2 && m[0].length == 2)
-            compensacion = -1;
-        
-        for (int i = 0; i < m.length + compensacion; i++) {//fila
-            double val = 1;
-            int fila = i;
-            
-            //System.out.print("*[\t");
-            
-            for (int j = 0; j < m[i].length; j++) {//columna
-                //System.out.print("val: " + m[fila][j] + ", #fila: " + fila + ", columna: " + j + "\t\t");
-                val*= m[fila][j];
-                fila++;
-                if (fila >= m.length)
-                    fila = 0;
-            }
-            
-            //System.out.print("]suma : " + val+ "\n[\t");
-            res += val;
-            val = 1;
-            
-            for (int j = m[i].length - 1; j >=0; j--) {//columna
-                //System.out.print("val: " + m[fila][j] + ", #fila: " + fila + ", columna: " + j + "\t\t");
-                val*= m[fila][j];
-                fila++;
-                if (fila >= m.length)
-                    fila = 0;
-            }
-            
-            //System.out.println("]resta : " + val);
-            res -= val;
-        }
-        
-        //System.out.println("res: " + res);
-        
-        return res;
+    public String[] getCText(){
+        return c;
     }
     
-    private double[][] calcularTranspuesta(double[][] m){
-        double[][] res = new double[m.length][m[0].length];
-        
-        int i = 0;
-        for (double[] v : m){
-            for (int j = 0; j < m.length; j++) 
-                res[j][i] = m[i][j];             
-            i++;
-        }
-            
-        
-        return res;
+    public String[] getCbText(){
+        return cb;
     }
     
-    private double[][] calcularMatrizAdjunta(double[][] m){
-        double[][] res = calcularSignosMatrziAdjunta(m);
-        
-        for (int i = 0; i < res.length; i++) 
-            for (int j = 0; j < res[i].length; j++) {
-                double[][] aux = new double[res.length-1][res[i].length-1];
-                
-                int x = 0;
-                
-                for (int k = 0; k < res.length; k++) {
-                    if (k==i)
-                        continue;
-                    
-                    int y=0;
-                    
-                    for (int l = 0; l < res[i].length; l++) {
-                        if ( l==j)
-                            continue;
-                        
-                        aux[x][y] = m[k][l];
-                        
-                        y++;                  
-                    }
-                    
-                    x++;
-                }/*
-                
-                System.out.println("\n\n");
-                
-                if(aux != null)
-                    for (int[] v : aux) 
-                        System.out.println(Arrays.toString(v));
-                
-                System.out.println("\n\n");//*/
-                
-                res[i][j] *= calcularDeterminante(aux);
-            }   
-        
-        return res;
+    public String[] getXbText(){
+        return Xb;
     }
-    
-    private double[][] calcularSignosMatrziAdjunta(double[][] m){
-        double[][] res = new double[m.length][m[0].length];
-        
-        for (int i = 0; i < m.length; i++)
-            for (int j = 0; j < m[i].length; j++){
-                if (Math.floorMod(i, 2) == Math.floorMod(j, 2))
-                    res[i][j] = 1;
-                else
-                    res[i][j] =-1;
-            }
-        
-        return res;
-    }
-    
-    private double[][] dividirMatriz(double[][] m, double dividendo){
-        double[][] res = new double[m.length][m[0].length];
-        
-        for (int i = 0; i < m.length; i++)
-            for (int j = 0; j < m[i].length ; j++)
-                res[i][j] = m[i][j] / dividendo;
-        
-        return res;
+
+    public boolean esOptima() {
+        return esOptima;
     }
 }
